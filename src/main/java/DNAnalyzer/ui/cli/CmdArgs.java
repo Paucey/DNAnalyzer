@@ -104,6 +104,11 @@ public class CmdArgs implements Runnable {
       description = "Quick analysis with basic features only")
   boolean quick;
 
+  @Option(
+      names = {"--mutate"},
+      description = "Generates 10 mutations of the DNA sequence, each with the specified number of mutations, and saves them to a file.")
+  int mutationCount = 0;
+
   /**
    * Output a list of proteins, GC content, Nucleotide content, and other information found in a DNA
    * sequence.
@@ -126,6 +131,10 @@ public class CmdArgs implements Runnable {
       DNAnalyzerGUI.launchIt(args);
     } else {
       DNAAnalysis dnaAnalyzer = dnaAnalyzer(aminoAcid).isValidDna().replaceDNA("u", "t");
+
+      if (mutationCount > 0) {
+        DNATools.mutateAndWriteToFile(dnaAnalyzer.dna().getDna(), mutationCount, System.out);
+      }
 
       if (reverse) {
         dnaAnalyzer = dnaAnalyzer.reverseDna();
