@@ -74,10 +74,26 @@ public class DNAMutation {
       numMutations = mutatedDna.length();
     }
 
-    // Create a list of all possible positions
+    // Create a list of all possible positions, ignoring unknown bases
     List<Integer> availablePositions = new ArrayList<>();
     for (int i = 0; i < dnaString.length(); i++) {
+      char base = dnaString.charAt(i);
+      if (base == 'n' || base == 'N') {
+        continue; // Skip
+      }
       availablePositions.add(i);
+    }
+
+    if (availablePositions.isEmpty()) {
+      System.out.println("Warning: No valid bases in DNA available for mutation.");
+      return dnaString; // Return the original string, unchanged
+    }
+    
+    if (numMutations > availablePositions.length()) {
+      System.out.println(
+          "Warning: Number of requested mutations exceeds the number of known bases. Limiting to "
+              + availablePositions.length());
+      numMutations = availablePositions.length();
     }
 
     // Perform mutations
